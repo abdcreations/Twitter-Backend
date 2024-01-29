@@ -1,11 +1,15 @@
-const express = require('express');
-
+import express from 'express';
+import connect from './config/database.js'
 const app = express();
 
-app.get('/',(req,res) => {
-    res.send("Twitter-Backend");
-})
+import TweetRepository from './repository/tweet-repository.js';
 
-app.listen(3000, (req,res) => {
-    console.log("Twitter backend is up and running");
-} )
+app.listen(3000, async () => {
+    console.log('server started');
+    await connect();
+    console.log('mongo connected');
+
+    const tweetRepo = new TweetRepository();
+    const tweet = await tweetRepo.create({content : 'with hoooks now'});
+    console.log(tweet);
+})
